@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const Task = require("../models/task");
 const axios = require("axios");
+const bot = require("../bot");
 
 const token = "6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY";
 
@@ -65,6 +66,13 @@ class TasksHandler {
           task.completedBy.push(user._id);
           user.vendettix += task.vendettix;
           user.xp += task.xp;
+          await bot.sendMessage(
+            user.chatid,
+            `🔔 <b>Вы выполнили задание!</b>\nНаграды:\n\n${task.vendettix} vendettix\n${task.xp} xp`,
+            {
+              parse_mode: "HTML",
+            }
+          );
           await user.save();
           await task.save();
           return res.status(200).json({ completed: true, error: false });

@@ -69,7 +69,7 @@ class BankHandler {
       await receiver.save();
       await user.save();
 
-      bot.sendMessage(
+      await bot.sendMessage(
         receiver.chatid,
         `🔔 <b>Уведомление!</b>\nПользователь <a href = "https://t.me/${user.tgusername}">${user.username}</a> отправил вам ${amount} vendettix. Проверить свой баланс вы сможете <a href = "https://c2kq4hl1-5173.euw.devtunnels.ms/bank">на сайте</a>.`,
         {
