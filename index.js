@@ -159,4 +159,4 @@ bot.on("photo", async (img) => {
   }
 });
 
-module.exports = bot;
+module.exports = app;
