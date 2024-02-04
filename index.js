@@ -32,6 +32,11 @@ app.listen(PORT, () => {
   }
 });
 
+app.post(`/bot${TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
 bot.on("polling_error", (err) => console.log(err.data.error.message));
 
 bot.on("text", async (msg) => {
