@@ -8,6 +8,8 @@ const Gallery = require("./models/gallery.js");
 
 const router = require("./router.js");
 
+const API_KEY_BOT = "6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY";
+
 const app = express();
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -32,7 +34,7 @@ app.listen(PORT, () => {
   }
 });
 
-app.post(`/bot${TOKEN}`, (req, res) => {
+app.post(`/bot${API_KEY_BOT}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
