@@ -42,7 +42,7 @@ app.post(`/bot${API_KEY_BOT}`, (req, res) => {
 bot.on("polling_error", (err) => console.log(err.data.error.message));
 
 bot.on("text", async (msg) => {
-  await bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
+  bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
     reply_markup: {
       inline_keyboard: [
         [
@@ -57,10 +57,9 @@ bot.on("text", async (msg) => {
 bot.on("callback_query", async (ctx) => {
   try {
     if (ctx.data.includes("acceptToClan")) {
-      await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-      await bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
-      const user = await User.findById(ctx.data.split(" ")[1]);
-      await bot.sendMessage(
+      bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
+      const user = User.findById(ctx.data.split(" ")[1]);
+      bot.sendMessage(
         user.chatid,
         `🔔 Поздавляем!\n<b>Вы были приняты в клан.</b> Чтобы продолжить, <a href = "https://t.me/nwqosh">Напишите нашему администратору за ссылкой</a>\nПривилегии на сайте выданы`,
         {
@@ -69,13 +68,12 @@ bot.on("callback_query", async (ctx) => {
         }
       );
       user.isClanMember = true;
-      await user.save();
+      user.save();
     }
     if (ctx.data.includes("rejectFromClan")) {
-      await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-      await bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
-      const user = await User.findById(ctx.data.split(" ")[1]);
-      await bot.sendMessage(
+      bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
+      const user = User.findById(ctx.data.split(" ")[1]);
+      bot.sendMessage(
         user.chatid,
         `🔔 Уведомление!\nК сожалению, ваша заявка нам не подошла. Не расстраивайтесь, попробуйте еще раз в след. раз!`,
         {
@@ -86,64 +84,45 @@ bot.on("callback_query", async (ctx) => {
     }
     switch (ctx.data) {
       case "iOS":
-        await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/72MovHv.png",
-          {
-            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: "Выполнил(а)", callback_data: "done" }],
-              ],
-            },
-          }
-        );
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/72MovHv.png", {
+          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
+          reply_markup: {
+            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
+          },
+        });
         break;
       case "Android":
-        await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/hGWBYp2.png",
-          {
-            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: "Выполнил(а)", callback_data: "done" }],
-              ],
-            },
-          }
-        );
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/hGWBYp2.png", {
+          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
+          reply_markup: {
+            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
+          },
+        });
         break;
       case "done":
-        await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/fVhg0a8.png",
-          {
-            caption: `Для завершения регистрации нажмите на кнопку https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
-              ctx.message.chat.id,
-              "urionzzz"
-            )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
-              ctx.message.chat.first_name
-            }&tglastname=${ctx.message.chat.last_name}`,
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "Нажмите сюда",
-                    url: `https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
-                      ctx.message.chat.id,
-                      "urionzzz"
-                    )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
-                      ctx.message.chat.first_name
-                    }&tglastname=${ctx.message.chat.last_name}`,
-                  },
-                ],
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/fVhg0a8.png", {
+          caption: `Для завершения регистрации нажмите на кнопку https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
+            ctx.message.chat.id,
+            "urionzzz"
+          )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
+            ctx.message.chat.first_name
+          }&tglastname=${ctx.message.chat.last_name}`,
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Нажмите сюда",
+                  url: `https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
+                    ctx.message.chat.id,
+                    "urionzzz"
+                  )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
+                    ctx.message.chat.first_name
+                  }&tglastname=${ctx.message.chat.last_name}`,
+                },
               ],
-            },
-          }
-        );
+            ],
+          },
+        });
     }
   } catch (error) {
     console.log(error);
@@ -153,14 +132,14 @@ bot.on("callback_query", async (ctx) => {
 bot.on("photo", async (img) => {
   try {
     let image = img.photo[img.photo.length - 2].file_id;
-    let url = (await bot.getFile(image)).file_path;
+    let url = bot.getFile(image).file_path;
     console.log(url);
 
     let dbImage = new Gallery({
       src: `https://api.telegram.org/file/bot6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY/${url}`,
     });
     bot.sendMessage(img.chat.id, "Фотография загружена");
-    await dbImage.save();
+    dbImage.save();
   } catch (err) {
     console.error(err);
   }
