@@ -101,18 +101,13 @@ bot.on("callback_query", async (ctx) => {
         break;
       case "done":
         bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/fVhg0a8.png", {
-          caption: `Для завершения регистрации нажмите на кнопку https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
-            ctx.message.chat.id,
-            "urionzzz"
-          )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
-            ctx.message.chat.first_name
-          }&tglastname=${ctx.message.chat.last_name}`,
+          caption: `Для завершения регистрации нажмите на кнопку`,
           reply_markup: {
             inline_keyboard: [
               [
                 {
                   text: "Нажмите сюда",
-                  url: `https://c2kq4hl1-5173.euw.devtunnels.ms/?token=${jwt.sign(
+                  url: `https://vendetta-avkn.vercel.app/?token=${jwt.sign(
                     ctx.message.chat.id,
                     "urionzzz"
                   )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
