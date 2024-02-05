@@ -48,7 +48,7 @@ app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
 
 bot.on("text", async (msg) => {
   console.log("ты дурень");
-  await bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
+  bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
     reply_markup: {
       inline_keyboard: [
         [
@@ -90,56 +90,40 @@ bot.on("callback_query", async (ctx) => {
     }
     switch (ctx.data) {
       case "iOS":
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/72MovHv.png",
-          {
-            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: "Выполнил(а)", callback_data: "done" }],
-              ],
-            },
-          }
-        );
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/72MovHv.png", {
+          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
+          reply_markup: {
+            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
+          },
+        });
         break;
       case "Android":
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/hGWBYp2.png",
-          {
-            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
-            reply_markup: {
-              inline_keyboard: [
-                [{ text: "Выполнил(а)", callback_data: "done" }],
-              ],
-            },
-          }
-        );
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/hGWBYp2.png", {
+          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
+          reply_markup: {
+            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
+          },
+        });
         break;
       case "done":
-        await bot.sendPhoto(
-          ctx.message.chat.id,
-          "https://i.imgur.com/fVhg0a8.png",
-          {
-            caption: `Для завершения регистрации нажмите на кнопку`,
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "Нажмите сюда",
-                    url: `https://vendetta-avkn.vercel.app/?token=${jwt.sign(
-                      ctx.message.chat.id,
-                      "urionzzz"
-                    )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
-                      ctx.message.chat.first_name
-                    }&tglastname=${ctx.message.chat.last_name}`,
-                  },
-                ],
+        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/fVhg0a8.png", {
+          caption: `Для завершения регистрации нажмите на кнопку`,
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Нажмите сюда",
+                  url: `https://vendetta-avkn.vercel.app/?token=${jwt.sign(
+                    ctx.message.chat.id,
+                    "urionzzz"
+                  )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
+                    ctx.message.chat.first_name
+                  }&tglastname=${ctx.message.chat.last_name}`,
+                },
               ],
-            },
-          }
-        );
+            ],
+          },
+        });
     }
   } catch (error) {
     console.log(error);
