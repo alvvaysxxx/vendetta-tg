@@ -6,6 +6,7 @@ const url = "https://vendetta-tg.vercel.app";
 
 const bot = new TelegramBot(API_KEY_BOT);
 async () => {
+  console.log("hello");
   await bot.setWebHook(`${url}/bot${API_KEY_BOT}`);
 };
 
