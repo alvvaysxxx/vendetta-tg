@@ -90,20 +90,32 @@ bot.on("callback_query", async (ctx) => {
     }
     switch (ctx.data) {
       case "iOS":
-        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/72MovHv.png", {
-          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
-          reply_markup: {
-            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
-          },
-        });
+        await bot.sendPhoto(
+          ctx.message.chat.id,
+          "https://i.imgur.com/72MovHv.png",
+          {
+            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для iOS)`,
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Выполнил(а)", callback_data: "done" }],
+              ],
+            },
+          }
+        );
         break;
       case "Android":
-        bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/hGWBYp2.png", {
-          caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
-          reply_markup: {
-            inline_keyboard: [[{ text: "Выполнил(а)", callback_data: "done" }]],
-          },
-        });
+        await bot.sendPhoto(
+          ctx.message.chat.id,
+          "https://i.imgur.com/hGWBYp2.png",
+          {
+            caption: `Перед тем, как вы продолжите, пожалуйста, выполните данную инструкцию, чтобы авторизация прошла успешно (для Android)`,
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: "Выполнил(а)", callback_data: "done" }],
+              ],
+            },
+          }
+        );
         break;
       case "done":
         bot.sendPhoto(ctx.message.chat.id, "https://i.imgur.com/fVhg0a8.png", {
@@ -139,7 +151,7 @@ bot.on("photo", async (img) => {
     let dbImage = new Gallery({
       src: `https://api.telegram.org/file/bot6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY/${url}`,
     });
-    bot.sendMessage(img.chat.id, "Фотография загружена");
+    await bot.sendMessage(img.chat.id, "Фотография загружена");
     await dbImage.save();
   } catch (err) {
     console.error(err);

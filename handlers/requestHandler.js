@@ -33,14 +33,14 @@ class RequestHandler {
       });
 
       await newRequest.save();
-      bot.sendMessage(
+      await bot.sendMessage(
         user.chatid,
         "🔔 <b>Вы успешно подали заявку на вступление в клан</b>\nДожидайтесь ответа от администраторов.",
         {
           parse_mode: "HTML",
         }
       );
-      bot.sendMessage(
+      await bot.sendMessage(
         "806166779",
         `🔔 <b>Заявка в клан!</b>\nЗаявка от: <a href = "https://t.me/${user.tgusername}">${user.tgname}</a>\n\nАнкета:\n1: ${request[1]}\n2: ${request[2]}\n3: ${request[3]}\n4: ${request[4]}\n5: ${request[5]}\n6: ${request[6]}\n7: ${request[7]}\n8: ${request[8]}\n9: ${request[9]}\n10: ${request[10]}\n\nЧто будем делать, Администратор?`,
         {
