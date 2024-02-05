@@ -65,6 +65,7 @@ bot.on("callback_query", async (ctx) => {
     if (ctx.data.includes("acceptToClan")) {
       await bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
       const user = await User.findById(ctx.data.split(" ")[1]);
+      console.log("hi!");
       await bot.sendMessage(
         user.chatid,
         `🔔 Поздавляем!\n<b>Вы были приняты в клан.</b> Чтобы продолжить, <a href = "https://t.me/nwqosh">Напишите нашему администратору за ссылкой</a>\nПривилегии на сайте выданы`,
