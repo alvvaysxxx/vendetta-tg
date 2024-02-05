@@ -1,3 +1,4 @@
 const app = require("../index");
+const bot = require("../bot");
 
-module.exports = app;
+module.exports = { app, bot };

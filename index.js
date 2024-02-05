@@ -36,6 +36,7 @@ app.listen(PORT, () => {
 
 app.post(`/bot${API_KEY_BOT}`, (req, res) => {
   bot.processUpdate(req.body);
+  console.log("Я получил соообщение!!!");
   res.sendStatus(200);
 });
 
