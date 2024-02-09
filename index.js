@@ -41,7 +41,7 @@ app.listen(PORT, () => {
   }
 });
 
-app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
+/*app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
   try {
     await bot.processUpdate(req.body);
     console.log("Я получил сообщение!!!");
@@ -50,7 +50,7 @@ app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
     console.error("Ошибка при обработке сообщения от бота:", error);
     res.sendStatus(500);
   }
-});
+});*/
 
 bot.on("text", async (msg) => {
   try {
@@ -68,13 +68,22 @@ bot.on("text", async (msg) => {
     }
     if (msg.text === "/profile" || msg.text == "/profile@avkvendetta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
+      if (!data) {
+        return bot.sendMessage(
+          msg.chat.id,
+          `Вы еще не создали свой профиль в системе Vendetta.\n<a href="https://vendetta-avkn.vercel.app">Создать его можно здесь</a>`,
+          {
+            parse_mode: "HTML",
+          }
+        );
+      }
       bot.sendMessage(
         msg.chat.id,
         `👤 Профиль пользователя @${msg.from.username}\n\n📝 КД: ${
           data.friendCode
         }\n🏷️ Ник: ${data.username}\n⭐ Уровень: ${Math.trunc(
           data.xp / 1000
-        )}\n\Роль пользователя: ${data.role}`,
+        )}\n\Роль пользователя: <b>${data.role}</b>`,
         {
           parse_mode: "HTML",
         }
