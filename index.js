@@ -54,7 +54,7 @@ app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
 
 bot.on("text", async (msg) => {
   try {
-    if (msg.text === "/start") {
+    if (msg.text === "/start" && msg.chat.type == "private") {
       bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
         reply_markup: {
           inline_keyboard: [
@@ -66,7 +66,7 @@ bot.on("text", async (msg) => {
         },
       });
     }
-    if (msg.text === "/profile") {
+    if (msg.text === "/profile" || msg.text == "/profile@avkvendetta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
       bot.sendMessage(
         msg.chat.id,
