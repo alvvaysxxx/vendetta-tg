@@ -67,7 +67,7 @@ bot.on("text", async (msg) => {
       });
     }
     if (msg.text === "/profile") {
-      let data = await User.findOne({ chatid: msg.chat.id });
+      let data = await User.findOne({ chatid: msg.from.id });
       bot.sendMessage(
         msg.chat.id,
         `👤 Профиль пользователя @${msg.chat.username}\n\n📝 КД: ${
