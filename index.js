@@ -10,11 +10,15 @@ const router = require("./router.js");
 
 const API_KEY_BOT = "6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY";
 
-async () => {
-  await mongoose.connect(
-    "mongodb+srv://urionzzz:79464241@cluster0.o5sciwm.mongodb.net/?retryWrites=true&w=majority"
-  );
-};
+(async () => {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://urionzzz:79464241@cluster0.o5sciwm.mongodb.net/?retryWrites=true&w=majority"
+    );
+  } catch (error) {
+    console.error("Ошибка при подключении к MongoDB:", error);
+  }
+})();
 
 const app = express();
 app.use(express.json());
@@ -33,42 +37,51 @@ app.listen(PORT, () => {
   try {
     console.log("Сервер стартанул!!! Порт:", PORT);
   } catch (err) {
-    console.error("Ошибка!", err);
+    console.error("Ошибка при запуске сервера:", err);
   }
 });
 
 app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
-  await bot.processUpdate(req.body);
-  console.log("Я получил соообщение!!!");
-  res.sendStatus(200);
+  try {
+    await bot.processUpdate(req.body);
+    console.log("Я получил сообщение!!!");
+    res.sendStatus(200);
+  } catch (error) {
+    console.error("Ошибка при обработке сообщения от бота:", error);
+    res.sendStatus(500);
+  }
 });
 
 bot.on("text", async (msg) => {
-  if (msg.text === "/start") {
-    bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: "iOS", callback_data: "iOS" },
-            { text: "Android", callback_data: "Android" },
+  try {
+    if (msg.text === "/start") {
+      bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              { text: "iOS", callback_data: "iOS" },
+              { text: "Android", callback_data: "Android" },
+            ],
           ],
-        ],
-      },
-    });
-  }
-  if (msg.text === "/profile") {
-    let data = await User.findOne({ chatid: msg.chat.id });
-    bot.sendMessage(
-      msg.chat.id,
-      `👤 Профиль пользователя @${msg.chat.username}\n\n📝 КД: ${
-        data.friendCode
-      }\n🏷️ Ник: ${data.username}\n⭐ Уровень: ${Math.trunc(
-        data.xp / 1000
-      )}\n\Роль пользователя: ${data.role}`,
-      {
-        parse_mode: "HTML",
-      }
-    );
+        },
+      });
+    }
+    if (msg.text === "/profile") {
+      let data = await User.findOne({ chatid: msg.chat.id });
+      bot.sendMessage(
+        msg.chat.id,
+        `👤 Профиль пользователя @${msg.chat.username}\n\n📝 КД: ${
+          data.friendCode
+        }\n🏷️ Ник: ${data.username}\n⭐ Уровень: ${Math.trunc(
+          data.xp / 1000
+        )}\n\Роль пользователя: ${data.role}`,
+        {
+          parse_mode: "HTML",
+        }
+      );
+    }
+  } catch (error) {
+    console.error("Ошибка при обработке текстового сообщения:", error);
   }
 });
 
@@ -151,7 +164,7 @@ bot.on("callback_query", async (ctx) => {
         });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Ошибка при обработке callback_query:", error);
   }
 });
 
@@ -166,8 +179,8 @@ bot.on("photo", async (img) => {
     });
     await bot.sendMessage(img.chat.id, "Фотография загружена");
     await dbImage.save();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Ошибка при обработке фотографии:", error);
   }
 });
 
