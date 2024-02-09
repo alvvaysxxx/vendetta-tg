@@ -44,17 +44,32 @@ app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
 });
 
 bot.on("text", async (msg) => {
-  console.log("ты дурень");
-  bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "iOS", callback_data: "iOS" },
-          { text: "Android", callback_data: "Android" },
+  if (msg.text === "/start") {
+    bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "iOS", callback_data: "iOS" },
+            { text: "Android", callback_data: "Android" },
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
+  }
+  if (msg.text === "/profile") {
+    let data = await User.findOne({ chatid: msg.chat.id });
+    bot.sendMessage(
+      msg.chat.id,
+      `👤 Профиль пользователя @${msg.chat.username}\n\n📝 КД: ${
+        data.friendCode
+      }\n🏷️ Ник: ${data.username}\n⭐ Уровень: ${Math.trunc(
+        data.xp / 1000
+      )}\n\Роль пользователя: ${data.role}`,
+      {
+        parse_mode: "HTML",
+      }
+    );
+  }
 });
 
 bot.on("callback_query", async (ctx) => {
