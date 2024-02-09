@@ -70,7 +70,7 @@ bot.on("text", async (msg) => {
       let data = await User.findOne({ chatid: msg.from.id });
       bot.sendMessage(
         msg.chat.id,
-        `👤 Профиль пользователя @${msg.chat.username}\n\n📝 КД: ${
+        `👤 Профиль пользователя @${msg.from.username}\n\n📝 КД: ${
           data.friendCode
         }\n🏷️ Ник: ${data.username}\n⭐ Уровень: ${Math.trunc(
           data.xp / 1000
@@ -170,15 +170,17 @@ bot.on("callback_query", async (ctx) => {
 
 bot.on("photo", async (img) => {
   try {
-    let image = img.photo[img.photo.length - 2].file_id;
-    let url = (await bot.getFile(image)).file_path;
-    console.log(url);
+    if (img.chat.type === "private") {
+      let image = img.photo[img.photo.length - 2].file_id;
+      let url = (await bot.getFile(image)).file_path;
+      console.log(url);
 
-    let dbImage = new Gallery({
-      src: `https://api.telegram.org/file/bot6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY/${url}`,
-    });
-    await bot.sendMessage(img.chat.id, "Фотография загружена");
-    await dbImage.save();
+      let dbImage = new Gallery({
+        src: `https://api.telegram.org/file/bot6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY/${url}`,
+      });
+      await bot.sendMessage(img.chat.id, "Фотография загружена");
+      await dbImage.save();
+    }
   } catch (error) {
     console.error("Ошибка при обработке фотографии:", error);
   }
