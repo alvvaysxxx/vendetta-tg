@@ -45,7 +45,7 @@ const User = new Schema({
   },
   inventory: {
     type: Object,
-    default: { unwarn: 0 },
+    default: { unwarn: 0, nextLevel: 0, anonymousMsg: 0 },
   },
   role: {
     type: String,

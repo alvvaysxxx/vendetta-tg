@@ -11,6 +11,10 @@ const RequestHandler = require("./handlers/requestHandler");
 const requestHandler = new RequestHandler();
 const GalleryHandler = require("./handlers/galleryHandler");
 const galleryHandler = new GalleryHandler();
+const ShopHandler = require("./handlers/shopHandler");
+const shopHandler = new ShopHandler();
+const ItemsHandler = require("./handlers/itemsHandler");
+const itemsHandler = new ItemsHandler();
 
 /* account */
 
@@ -70,6 +74,20 @@ router.post("/requests/new", auth, (req, res) => {
 
 router.get("/gallery/get", (req, res) => {
   galleryHandler.getGallery(req, res);
+});
+
+/* shop */
+
+router.get("/shop/get", (req, res) => {
+  shopHandler.getProducts(req, res);
+});
+
+router.post("/shop/buy", auth, (req, res) => {
+  shopHandler.buyProduct(req, res);
+});
+
+router.post("/items/sendAnonMsg", auth, (req, res) => {
+  itemsHandler.sendAnonymousMsg(req, res);
 });
 
 module.exports = router;
