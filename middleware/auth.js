@@ -9,7 +9,6 @@ async function authentication(req, res, next) {
     const currentUser = await User.findOne({
       chatid: decodedToken,
     });
-    console.log(currentUser);
     req.user = currentUser;
     next();
   } catch (err) {

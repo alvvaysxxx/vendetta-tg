@@ -51,6 +51,9 @@ const User = new Schema({
     type: String,
     default: "Пользователь",
   },
+  lastspin: {
+    type: Date,
+  },
 });
 
 module.exports = model("user", User);

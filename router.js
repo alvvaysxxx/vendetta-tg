@@ -86,8 +86,18 @@ router.post("/shop/buy", auth, (req, res) => {
   shopHandler.buyProduct(req, res);
 });
 
+/* items */
+
 router.post("/items/sendAnonMsg", auth, (req, res) => {
   itemsHandler.sendAnonymousMsg(req, res);
+});
+
+router.get("/items/spin", auth, (req, res) => {
+  itemsHandler.spin(req, res);
+});
+
+router.get("/items/tillnextspin", auth, (req, res) => {
+  itemsHandler.getTimeTillNextSpin(req, res);
 });
 
 module.exports = router;
