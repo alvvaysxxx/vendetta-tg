@@ -1,5 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+
 const jwt = require("jsonwebtoken");
 const generateProfileImage = require("./tghandlers/profile_image.js");
 const bot = require("./bot.js");
@@ -34,12 +39,14 @@ app.use("/", router);
 
 const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-  try {
-    console.log("Сервер стартанул!!! Порт:", PORT);
-  } catch (err) {
-    console.error("Ошибка при запуске сервера:", err);
-  }
+const options = {
+  key: fs.readFileSync(path.join(__dirname, "..", "csr.pem")),
+  cert: fs.readFileSync(path.join(__dirname, "..", "private-key.pem")),
+};
+
+const sslServer = https.createServer(options, app);
+sslServer.listen(1337, () => {
+  console.log("Secure server is listening on port 1337");
 });
 
 /*app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
@@ -53,7 +60,7 @@ app.listen(PORT, () => {
   }
 });*/
 
-bot.on("text", async (msg) => {
+/* bot.on("text", async (msg) => {
   try {
     if (msg.text === "/start" && msg.chat.type == "private") {
       bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
@@ -195,5 +202,6 @@ bot.on("photo", async (img) => {
     console.error("Ошибка при обработке фотографии:", error);
   }
 });
+*/
 
 module.exports = app;
