@@ -45,7 +45,7 @@ const options = {
 };
 
 const sslServer = https.createServer(options, app);
-sslServer.listen(1337, () => {
+sslServer.listen(8000, () => {
   console.log("Secure server is listening on port 1337");
 });
 
