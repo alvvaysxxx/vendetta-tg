@@ -1,10 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
-const https = require("https");
-const fs = require("fs");
-const path = require("path");
-
 const jwt = require("jsonwebtoken");
 const generateProfileImage = require("./tghandlers/profile_image.js");
 const bot = require("./bot.js");
@@ -39,14 +34,12 @@ app.use("/", router);
 
 const PORT = process.env.PORT || 8000;
 
-const options = {
-  key: fs.readFileSync(path.join(__dirname, "..", "csr.pem")),
-  cert: fs.readFileSync(path.join(__dirname, "..", "private-key.pem")),
-};
-
-const sslServer = https.createServer(options, app);
-sslServer.listen(8000, () => {
-  console.log("Secure server is listening on port 1337");
+app.listen(PORT, () => {
+  try {
+    console.log("Сервер стартанул!!! Порт:", PORT);
+  } catch (err) {
+    console.error("Ошибка при запуске сервера:", err);
+  }
 });
 
 /*app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
