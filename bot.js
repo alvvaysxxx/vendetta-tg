@@ -17,10 +17,10 @@ const commands = [
   },
 ];
 
-/* const bot = new TelegramBot(API_KEY_BOT, {
+const bot = new TelegramBot(API_KEY_BOT, {
   polling: true,
-}); 
+});
 
 bot.setMyCommands(commands);
 
-module.exports = bot; */
+module.exports = bot;
