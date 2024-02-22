@@ -79,7 +79,7 @@ bot.on("text", async (msg) => {
       }
       bot.sendMessage(
         msg.chat.id,
-        `👤 Предметы пользователя @${msg.from.username}\n\n📝 <b>Снятие преда:</b> ${data.inventory.unwarn}\n🏷️ <b>Переход на новый уровень:</b> ${data.inventory.nextLvl}\n⭐ <b>Анонимное сообщение:</b> ${data.inventory.anonymousMsg}`,
+        `👤 Предметы пользователя @${msg.from.username}\n\n⚠️ <b>Снятие преда:</b> ${data.inventory.unwarn}\n🌟 <b>Переход на новый уровень:</b> ${data.inventory.nextLevel}\n🤫 <b>Анонимное сообщение:</b> ${data.inventory.anonymousMsg}`,
         {
           parse_mode: "HTML",
         }
