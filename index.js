@@ -52,23 +52,46 @@ app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
 bot.on("text", async (msg) => {
   try {
     if (msg.text === "/start" && msg.chat.type == "private") {
-      bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: "iOS", callback_data: "iOS" },
-              { text: "Android", callback_data: "Android" },
-            ],
-          ],
-        },
-      });
+      bot.sendMessage(
+        msg.chat.id,
+        `<b>Добро пожаловать в экосистему клана Vendetta.</b>\nПо нажатию на кнопку "Приложение" снизу вы сможете попасть в наше приложение.\nТак-же, вы можете использовать команды. Напишите "/", и Telegram выведет вам список команд`,
+        {
+          parse_mode: "HTML",
+        }
+      );
     }
+
+    if (
+      msg.text === "/inventory" ||
+      msg.text === "/inventory@avkvendetta_bot"
+    ) {
+      let data = await User.findOne({ chatid: msg.from.id });
+      if (!data) {
+        if (!data) {
+          return bot.sendMessage(
+            msg.chat.id,
+            `Вы еще не создали свой профиль в системе Vendetta.`,
+            {
+              parse_mode: "HTML",
+            }
+          );
+        }
+      }
+      bot.sendMessage(
+        msg.chat.id,
+        `👤 Предметы пользователя @${msg.from.username}\n\n📝 <b>Снятие преда:</b> ${data.inventory.unwarn}\n🏷️ <b>Переход на новый уровень:</b> ${data.inventory.nextLvl}\n⭐ <b>Анонимное сообщение:</b> ${data.inventory.anonymousMsg}`,
+        {
+          parse_mode: "HTML",
+        }
+      );
+    }
+
     if (msg.text === "/profile" || msg.text == "/profile@avkvendetta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
       if (!data) {
         return bot.sendMessage(
           msg.chat.id,
-          `Вы еще не создали свой профиль в системе Vendetta.\n<a href="https://vendetta-avkn.vercel.app">Создать его можно здесь</a>`,
+          `Вы еще не создали свой профиль в системе Vendetta.`,
           {
             parse_mode: "HTML",
           }
