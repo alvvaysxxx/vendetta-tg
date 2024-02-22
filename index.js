@@ -1,12 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const generateProfileImage = require("./tghandlers/profile_image.js");
 const bot = require("./bot.js");
 const User = require("./models/user.js");
 const Gallery = require("./models/gallery.js");
-
-const router = require("./router.js");
 
 const API_KEY_BOT = "6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY";
 
@@ -30,7 +27,6 @@ app.use(function (req, res, next) {
   res.setHeader("Content-Type", "application/json");
   next();
 });
-app.use("/", router);
 
 const PORT = process.env.PORT || 8000;
 
@@ -42,7 +38,7 @@ app.listen(PORT, () => {
   }
 });
 
-/*app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
+app.post(`/bot${API_KEY_BOT}`, async (req, res) => {
   try {
     await bot.processUpdate(req.body);
     console.log("Я получил сообщение!!!");
@@ -51,9 +47,9 @@ app.listen(PORT, () => {
     console.error("Ошибка при обработке сообщения от бота:", error);
     res.sendStatus(500);
   }
-});*/
+});
 
-/* bot.on("text", async (msg) => {
+bot.on("text", async (msg) => {
   try {
     if (msg.text === "/start" && msg.chat.type == "private") {
       bot.sendMessage(msg.chat.id, `Здравствуйте! Выберите вашу платформу`, {
@@ -195,6 +191,5 @@ bot.on("photo", async (img) => {
     console.error("Ошибка при обработке фотографии:", error);
   }
 });
-*/
 
 module.exports = app;
