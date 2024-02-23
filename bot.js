@@ -12,6 +12,10 @@ const commands = [
     description: "Ваш профиль",
   },
   {
+    command: "inventory",
+    description: "Ваш инвентарь",
+  },
+  {
     command: "help",
     description: "Раздел помощи",
   },
