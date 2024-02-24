@@ -183,6 +183,38 @@ bot.on("message", async (msg) => {
 
 bot.on("callback_query", async (ctx) => {
   try {
+    if (ctx.data.includes("acceptMarriage")) {
+      await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
+      await bot.sendMessage(
+        ctx.message.chat.id,
+        "✔️ Поздравляем! Вы согласились на брак!"
+      );
+      const user = await User.findById(ctx.data.split(" ")[1]);
+      await bot.sendMessage(
+        user.chatid,
+        `🔔 <b>Уведомление!</b>\nВаша заявка на брак была принята, поздравляем!`,
+        {
+          parse_mode: "HTML",
+        }
+      );
+    }
+
+    if (ctx.data.includes("rejectMarriage")) {
+      await bot.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
+      await bot.sendMessage(
+        ctx.message.chat.id,
+        "❌ Вы отказались от бракосочетания"
+      );
+      const user = await User.findById(ctx.data.split(" ")[1]);
+      await bot.sendMessage(
+        user.chatid,
+        `🔔 <b>Уведомление!</b>\nК сожалению, ваша заявка на брак была отклонена, не расстраивайтесь!`,
+        {
+          parse_mode: "HTML",
+        }
+      );
+    }
+
     if (ctx.data.includes("acceptToClan")) {
       await bot.sendMessage(ctx.message.chat.id, "Пользователь оповещен.");
       const user = await User.findById(ctx.data.split(" ")[1]);
