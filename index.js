@@ -54,9 +54,19 @@ bot.on("text", async (msg) => {
     if (msg.text === "/start" && msg.chat.type == "private") {
       bot.sendMessage(
         msg.chat.id,
-        `<b>Добро пожаловать в экосистему клана Vendetta.</b>\nПо нажатию на кнопку "Приложение" снизу вы сможете попасть в наше приложение.\nТак-же, вы можете использовать команды. Напишите "/", и Telegram выведет вам список команд`,
+        `<b>Добро пожаловать в экосистему клана Vendetta.</b>\nПо нажатию на кнопку "Приложение" снизу вы сможете попасть в наше приложение.\nТакже, вы можете использовать команды. Напишите "/", и Telegram выведет вам список команд`,
         {
           parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Приложение Vendetta",
+                  web_app: { url: "https://vendetta-avkn.vercel.app/" },
+                },
+              ],
+            ],
+          },
         }
       );
     }
@@ -72,7 +82,18 @@ bot.on("text", async (msg) => {
             msg.chat.id,
             `Вы еще не создали свой профиль в системе Vendetta.`,
             {
+              reply_to_message_id: msg.message_id,
               parse_mode: "HTML",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "Создайте!",
+                      web_app: { url: "https://vendetta-avkn.vercel.app/" },
+                    },
+                  ],
+                ],
+              },
             }
           );
         }
@@ -81,6 +102,7 @@ bot.on("text", async (msg) => {
         msg.chat.id,
         `👤 Предметы пользователя @${msg.from.username}\n\n⚠️ <b>Снятие преда:</b> ${data.inventory.unwarn}\n🌟 <b>Переход на новый уровень:</b> ${data.inventory.nextLevel}\n🤫 <b>Анонимное сообщение:</b> ${data.inventory.anonymousMsg}`,
         {
+          reply_to_message_id: msg.message_id,
           parse_mode: "HTML",
         }
       );
@@ -93,7 +115,18 @@ bot.on("text", async (msg) => {
           msg.chat.id,
           `Вы еще не создали свой профиль в системе Vendetta.`,
           {
+            reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "Создайте!",
+                    web_app: { url: "https://vendetta-avkn.vercel.app/" },
+                  },
+                ],
+              ],
+            },
           }
         );
       }
@@ -105,12 +138,36 @@ bot.on("text", async (msg) => {
           data.xp / 1000
         )}\n\Роль пользователя: <b>${data.role}</b>`,
         {
+          reply_to_message_id: msg.message_id,
           parse_mode: "HTML",
         }
       );
     }
   } catch (error) {
     console.error("Ошибка при обработке текстового сообщения:", error);
+  }
+});
+
+bot.on("message", async (msg) => {
+  if (msg.new_chat_members != undefined) {
+    bot.sendMessage(
+      msg.chat.id,
+      `<a href = "https://t.me/${msg.new_chat_participant.username}"><b>${msg.new_chat_participant.first_name}</b></a>, добро пожаловать в Vendetta!`,
+      {
+        reply_to_message_id: msg.message_id,
+        reply_markup: {
+          resize_keyboard: true,
+          one_time_keyboard: true,
+          keyboard: [
+            {
+              text: "Приложение Vendetta",
+              web_app: "https://vendetta-avkn.vercel.app/",
+            },
+          ],
+        },
+        parse_mode: "HTML",
+      }
+    );
   }
 });
 
