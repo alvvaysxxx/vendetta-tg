@@ -77,26 +77,30 @@ bot.on("text", async (msg) => {
     ) {
       let data = await User.findOne({ chatid: msg.from.id });
       if (!data) {
-        if (!data) {
-          return bot.sendMessage(
-            msg.chat.id,
-            `Вы еще не создали свой профиль в системе Vendetta.`,
-            {
-              reply_to_message_id: msg.message_id,
-              parse_mode: "HTML",
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "Создайте!",
-                      web_app: { url: "https://vendetta-avkn.vercel.app/" },
-                    },
-                  ],
-                ],
-              },
-            }
-          );
-        }
+        return bot.sendMessage(
+          msg.chat.id,
+          `Вы еще не создали свой профиль в системе Vendetta.`,
+          {
+            reply_to_message_id: msg.message_id,
+            parse_mode: "HTML",
+            ...(msg.chat.type === "private"
+              ? {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "Создайте!",
+                          web_app: {
+                            url: "https://vendetta-avkn.vercel.app/",
+                          },
+                        },
+                      ],
+                    ],
+                  },
+                }
+              : {}),
+          }
+        );
       }
       bot.sendMessage(
         msg.chat.id,
@@ -117,16 +121,22 @@ bot.on("text", async (msg) => {
           {
             reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "Создайте!",
-                    web_app: { url: "https://vendetta-avkn.vercel.app/" },
+            ...(msg.chat.type === "private"
+              ? {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "Создайте!",
+                          web_app: {
+                            url: "https://vendetta-avkn.vercel.app/",
+                          },
+                        },
+                      ],
+                    ],
                   },
-                ],
-              ],
-            },
+                }
+              : {}),
           }
         );
       }
