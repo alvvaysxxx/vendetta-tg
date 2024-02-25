@@ -28,7 +28,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   try {
@@ -190,6 +190,7 @@ bot.on("callback_query", async (ctx) => {
         "✔️ Поздравляем! Вы согласились на брак!"
       );
       const user = await User.findById(ctx.data.split(" ")[1]);
+      const receiver = await User.findOne({ chatid: ctx.message.chat.id });
       await bot.sendMessage(
         user.chatid,
         `🔔 <b>Уведомление!</b>\nВаша заявка на брак была принята, поздравляем!`,
@@ -197,6 +198,11 @@ bot.on("callback_query", async (ctx) => {
           parse_mode: "HTML",
         }
       );
+      user.marriedWith = receiver._id;
+      receiver.marriedWith = user._id;
+
+      await user.save();
+      await receiver.save();
     }
 
     if (ctx.data.includes("rejectMarriage")) {
