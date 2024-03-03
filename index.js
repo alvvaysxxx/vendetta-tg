@@ -54,15 +54,15 @@ bot.on("text", async (msg) => {
     if (msg.text === "/start" && msg.chat.type == "private") {
       bot.sendMessage(
         msg.chat.id,
-        `<b>Добро пожаловать в экосистему клана Vendetta.</b>\nПо нажатию на кнопку "Приложение" снизу вы сможете попасть в наше приложение.\nТакже, вы можете использовать команды. Напишите "/", и Telegram выведет вам список команд`,
+        `<b>Добро пожаловать в экосистему клана Vieta.</b>\nПо нажатию на кнопку "Приложение" снизу вы сможете попасть в наше приложение.\nТакже, вы можете использовать команды. Напишите "/", и Telegram выведет вам список команд`,
         {
           parse_mode: "HTML",
           reply_markup: {
             inline_keyboard: [
               [
                 {
-                  text: "Приложение Vendetta",
-                  web_app: { url: "https://vendetta-avkn.vercel.app/" },
+                  text: "Приложение Vieta",
+                  web_app: { url: "https://Vieta-avkn.vercel.app/" },
                 },
               ],
             ],
@@ -71,15 +71,12 @@ bot.on("text", async (msg) => {
       );
     }
 
-    if (
-      msg.text === "/inventory" ||
-      msg.text === "/inventory@avkvendetta_bot"
-    ) {
+    if (msg.text === "/inventory" || msg.text === "/inventory@avavieta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
       if (!data) {
         return bot.sendMessage(
           msg.chat.id,
-          `Вы еще не создали свой профиль в системе Vendetta.`,
+          `Вы еще не создали свой профиль в системе Vieta.`,
           {
             reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
@@ -91,7 +88,7 @@ bot.on("text", async (msg) => {
                         {
                           text: "Создайте!",
                           web_app: {
-                            url: "https://vendetta-avkn.vercel.app/",
+                            url: "https://Vieta-avkn.vercel.app/",
                           },
                         },
                       ],
@@ -112,12 +109,12 @@ bot.on("text", async (msg) => {
       );
     }
 
-    if (msg.text === "/profile" || msg.text == "/profile@avkvendetta_bot") {
+    if (msg.text === "/profile" || msg.text == "/profile@avavieta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
       if (!data) {
         return bot.sendMessage(
           msg.chat.id,
-          `Вы еще не создали свой профиль в системе Vendetta.`,
+          `Вы еще не создали свой профиль в системе Vieta.`,
           {
             reply_to_message_id: msg.message_id,
             parse_mode: "HTML",
@@ -129,7 +126,7 @@ bot.on("text", async (msg) => {
                         {
                           text: "Создайте!",
                           web_app: {
-                            url: "https://vendetta-avkn.vercel.app/",
+                            url: "https://Vieta-avkn.vercel.app/",
                           },
                         },
                       ],
@@ -162,7 +159,7 @@ bot.on("message", async (msg) => {
   if (msg.new_chat_members != undefined) {
     bot.sendMessage(
       msg.chat.id,
-      `<a href = "https://t.me/${msg.new_chat_participant.username}"><b>${msg.new_chat_participant.first_name}</b></a>, добро пожаловать в Vendetta!`,
+      `<a href = "https://t.me/${msg.new_chat_participant.username}"><b>${msg.new_chat_participant.first_name}</b></a>, добро пожаловать в Vieta!`,
       {
         reply_to_message_id: msg.message_id,
         reply_markup: {
@@ -170,8 +167,8 @@ bot.on("message", async (msg) => {
           one_time_keyboard: true,
           keyboard: [
             {
-              text: "Приложение Vendetta",
-              web_app: "https://vendetta-avkn.vercel.app/",
+              text: "Приложение Vieta",
+              web_app: "https://Vieta-avkn.vercel.app/",
             },
           ],
         },
@@ -285,7 +282,7 @@ bot.on("callback_query", async (ctx) => {
               [
                 {
                   text: "Нажмите сюда",
-                  url: `https://vendetta-avkn.vercel.app/?token=${jwt.sign(
+                  url: `https://Vieta-avkn.vercel.app/?token=${jwt.sign(
                     ctx.message.chat.id,
                     "urionzzz"
                   )}&tgusername=${ctx.message.chat.username}&tgfirstname=${
