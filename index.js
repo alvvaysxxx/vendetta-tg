@@ -71,6 +71,64 @@ bot.on("text", async (msg) => {
       );
     }
 
+    if (msg.text == "/marriages" || msg.text == "/marriages@avavieta_bot") {
+      try {
+        const users = await User.find({ marriedWith: { $ne: "" } });
+
+        // Prepare the response as an array of marriage objects
+        const marriages = await Promise.all(
+          users.map(async (user) => {
+            try {
+              const marriedWith = await User.findById(user.marriedWith);
+              return {
+                partner1: {
+                  id: user._id,
+                  avatarUrl: user.avatarUrl,
+                  username: user.username,
+                  tgusername: user.tgusername,
+                },
+                partner2: {
+                  id: marriedWith._id,
+                  avatarUrl: marriedWith.avatarUrl,
+                  username: marriedWith.username,
+                  tgusername: marriedWith.tgusername,
+                },
+              };
+            } catch (error) {
+              console.error(`Error fetching marriage details: ${error}`);
+              // You might want to handle the error or return some default value
+              return null;
+            }
+          })
+        );
+
+        const uniqueMarriages = [];
+
+        const seenPairs = new Set();
+
+        marriages.forEach((marriage) => {
+          const sortedIds = [marriage.partner1.id, marriage.partner2.id].sort();
+          const pair = sortedIds.join("_");
+          if (!seenPairs.has(pair)) {
+            uniqueMarriages.push(marriage);
+            seenPairs.add(pair);
+          }
+        });
+
+        let resStr = "";
+        for (let i = 0; i < uniqueMarriages.length; i++) {
+          resStr += `<a href = "https://t.me/${uniqueMarriages[i].partner1.tgusername}">${uniqueMarriages[i].partner1.username}</a> ❤ <a href = "https://t.me/${uniqueMarriages[i].partner2.tgusername}">${uniqueMarriages[i].partner2.username}</a>\n`;
+        }
+        await bot.sendMessage(msg.chat.id, `💍 Все браки:\n\n${resStr}`, {
+          reply_to_message_id: msg.message_id,
+          parse_mode: "HTML",
+          disable_web_page_preview: true,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     if (msg.text === "/inventory" || msg.text === "/inventory@avavieta_bot") {
       let data = await User.findOne({ chatid: msg.from.id });
       if (!data) {

@@ -19,6 +19,10 @@ const commands = [
     command: "help",
     description: "Раздел помощи",
   },
+  {
+    command: "marriages",
+    description: "Вывести список бракосочетаний",
+  },
 ];
 
 const bot = new TelegramBot(API_KEY_BOT, {
