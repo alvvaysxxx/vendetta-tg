@@ -4,8 +4,9 @@ const jwt = require("jsonwebtoken");
 const bot = require("./bot.js");
 const User = require("./models/user.js");
 const Gallery = require("./models/gallery.js");
+const axios = require("axios");
 
-const API_KEY_BOT = "6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY";
+const API_KEY_BOT = "7033176556:AAFjD9Vns3shJ0hve7znsDiVIl3oEU5JQtI";
 
 (async () => {
   try {
@@ -360,12 +361,28 @@ bot.on("callback_query", async (ctx) => {
 bot.on("photo", async (img) => {
   try {
     if (img.chat.type === "private") {
-      let image = img.photo[img.photo.length - 2].file_id;
-      let url = (await bot.getFile(image)).file_path;
-      console.log(url);
+      console.log(img.photo);
+      let imageId = img.photo[img.photo.length - 2].file_id;
+      const file = await bot.getFile(imageId);
+      const imageBuffer = await axios.get(
+        `https://api.telegram.org/file/bot${API_KEY_BOT}/${file.file_path}`,
+        { responseType: "arraybuffer" }
+      );
+      const base64Image = Buffer.from(imageBuffer.data, "binary").toString(
+        "base64"
+      );
+      const response = await axios.post(
+        "https://api.imgur.com/3/image",
+        { image: base64Image },
+        {
+          headers: {
+            Authorization: "Client-ID 99ab068c4469655",
+          },
+        }
+      );
 
       let dbImage = new Gallery({
-        src: `https://api.telegram.org/file/bot6855579648:AAF29wJqMxl_QCdy9RCjesGojgSduJxJrLY/${url}`,
+        src: response.data.data.link,
       });
       await bot.sendMessage(img.chat.id, "Фотография загружена");
       await dbImage.save();
